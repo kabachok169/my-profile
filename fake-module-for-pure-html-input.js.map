@@ -1,0 +1,1 @@
+{"version":3,"file":"fake-module-for-pure-html-input.js","sources":["../fake-module-for-pure-html-input.js"],"sourcesContent":["export const doNothing = true; // I am here to allow pure html inputs for rollup"],"names":[],"mappings":"AAAY,MAAC,SAAS,GAAG,KAAK;;;;"}
