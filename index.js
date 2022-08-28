@@ -450,16 +450,77 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z$3 = ".page-module_page__Dba8t {\n  width: 100vw;\n  display: flex;\n  flex-direction: column;\n  padding: 20px; }\n";
-var s = {"page":"page-module_page__Dba8t"};
-styleInject(css_248z$3);
+var css_248z$4 = ".layout-module_page__905VR {\n  width: 100vw;\n  display: flex;\n  flex-direction: column;\n  padding: 20px;\n  box-sizing: border-box; }\n\n.layout-module_section__jZrnS {\n  width: 100vw;\n  height: calc(100vh - 20px);\n  display: flex;\n  flex-direction: column;\n  padding: 20px;\n  box-sizing: border-box;\n  border-top: thin black solid; }\n  .layout-module_section__jZrnS:first-of-type {\n    border-top: none; }\n";
+var s$1 = {"page":"layout-module_page__905VR","section":"layout-module_section__jZrnS"};
+styleInject(css_248z$4);
 
 const Page = ({ children }) => {
-    return React.createElement("div", { className: s.page }, children);
+    return React.createElement("div", { className: s$1.page }, children);
+};
+
+const Section = ({ hashName, onClick, children }) => {
+    return React.createElement("div", { className: s$1.section, "data-hash": hashName, onClick: onClick }, children);
+};
+
+const EXPERIENCE = 'experience';
+const ABOUT = 'about';
+const PORTFOLIO = 'portfolio';
+const useNavigation = () => {
+    const scrollToPage = () => {
+        const hash = window.location.hash.slice(1);
+        document.querySelector(`[data-hash='${hash}']`)?.scrollIntoView({ behavior: 'smooth' });
+    };
+    const goToAbout = () => {
+        window.location.hash = `#${ABOUT}`;
+        scrollToPage();
+    };
+    const goToExperience = () => {
+        window.location.hash = `#${EXPERIENCE}`;
+        scrollToPage();
+    };
+    const goToPortfolio = () => {
+        window.location.hash = `#${PORTFOLIO}`;
+        scrollToPage();
+    };
+    const routes = {
+        [ABOUT]: goToAbout,
+        [EXPERIENCE]: goToExperience,
+        [PORTFOLIO]: goToPortfolio
+    };
+    const goToCurrent = () => {
+        const hash = window.location.hash.slice(1);
+        if (Object.keys(routes).includes(hash)) {
+            routes[hash]();
+        }
+        else {
+            goToAbout();
+        }
+    };
+    return { goToCurrent, goToAbout, goToExperience, goToPortfolio, routes };
 };
 
 const AboutSection = () => {
-    return React.createElement("div", null, "About Me");
+    const { goToExperience } = useNavigation();
+    return React.createElement(Section, { hashName: ABOUT, onClick: goToExperience }, "About Me");
+};
+
+const ExperienceSection = () => {
+    const { goToPortfolio } = useNavigation();
+    return React.createElement(Section, { hashName: EXPERIENCE, onClick: goToPortfolio }, "Experience");
+};
+
+const PortfolioSection = () => {
+    const { goToAbout } = useNavigation();
+    return React.createElement(Section, { hashName: PORTFOLIO, onClick: goToAbout }, "Portfolio");
+};
+
+var css_248z$3 = ".navigation-module_navigation__O4uOl {\n  position: fixed;\n  right: 48px;\n  top: 50%;\n  transform: translateY(-50%);\n  display: flex;\n  flex-direction: column; }\n  .navigation-module_navigation__O4uOl div {\n    border-radius: 100px;\n    position: relative;\n    width: 48px;\n    height: 48px;\n    margin-top: 96px;\n    border: black 2px solid;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    cursor: pointer;\n    font-size: 24px; }\n    .navigation-module_navigation__O4uOl div:first-of-type {\n      margin-top: 0; }\n    .navigation-module_navigation__O4uOl div:not(:last-of-type)::after {\n      position: absolute;\n      content: '';\n      height: 96px;\n      bottom: -98px;\n      border-left: black 2px solid; }\n";
+var s = {"navigation":"navigation-module_navigation__O4uOl"};
+styleInject(css_248z$3);
+
+const Navigation = ({ routes }) => {
+    console.log(routes);
+    return (React.createElement("nav", { className: s.navigation }, Object.keys(routes).map((key, index) => (React.createElement("div", { onClick: routes[key], key: key }, index)))));
 };
 
 var css_248z$2 = "/* http://meyerweb.com/eric/tools/css/reset/ \n   v2.0 | 20110126\n   License: none (public domain)\n*/\n\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed, \nfigure, figcaption, footer, header, hgroup, \nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n}\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure, \nfooter, header, hgroup, menu, nav, section {\n\tdisplay: block;\n}\nbody {\n\tline-height: 1;\n}\nol, ul {\n\tlist-style: none;\n}\nblockquote, q {\n\tquotes: none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n\tcontent: '';\n\tcontent: none;\n}\ntable {\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}";
@@ -472,8 +533,15 @@ var css_248z = "";
 styleInject(css_248z);
 
 const App = () => {
+    const { goToCurrent, routes } = useNavigation();
+    React.useEffect(() => {
+        goToCurrent();
+    }, []);
     return (React.createElement(Page, null,
-        React.createElement(AboutSection, null)));
+        React.createElement(AboutSection, null),
+        React.createElement(ExperienceSection, null),
+        React.createElement(PortfolioSection, null),
+        React.createElement(Navigation, { routes: routes })));
 };
 
 const container = document.getElementById('root');
