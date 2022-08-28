@@ -1,0 +1,21 @@
+.page {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.section {
+    width: 100vw;
+    height: calc(100vh - 20px);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    border-top: thin black solid;
+
+    &:first-of-type {
+        border-top: none;
+    }
+}
